@@ -42,7 +42,7 @@ try:
     parameters = pd.read_csv('Saved_Parameters.csv')
 except FileNotFoundError:
     print(f'File not found, download default file from github {link}  quiting program')
-    quit()
+
 except Exception:
     print(f'Something went wrong, Noclue what')
     quit()
