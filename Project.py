@@ -47,18 +47,18 @@ except Exception:
     print(f'Something went wrong, Noclue what')
     quit()
 choice=10
-print("NOTE: All the data are in terms of Solar Mass, Orbital Velocity of Earth, Distance b/w Alpha Centauri, Time period of Earth Sun system[1 year], and should be entered likewise only for good performance.")
+print("NOTE: All the data are in terms of Solar Mass, Orbital Velocity of Earth,\nDistance b/w Alpha Centauri, Time period of Earth Sun system[1 year],\nand should be entered likewise only for good performance.")
 print(f"Constants and scaling factors:\nMass of Sun: {m_sun}\nOrbital Velocity of Earth: {v_e}\nDistance: {r_ac},\nTime Period: {t_se}\nForce Scaler: {K1}\nVelocity Scaler: {K2}")
-print("===================================================================")
-print("          Welcome to the 2 body Simulatior     ")
+print("="*70)
+print("          Welcome to the 2 body Simulator     ")
 while choice != 5:
-    print("===============================================================")
+    print("="*70)
     print("1. Run Simulation")
     print("2. Export CSV solution")
     print("3. Import CSV and plot data")
     print("4. Edit the CSV")
     print("5. Exit")
-    print("================================================================")
+    print("="*70)
     if con=='y':
         choice=4
     else:
@@ -66,11 +66,11 @@ while choice != 5:
     if choice==1:
         use_saved=input("Do you want to use saved parameters from csv(y/n)?:")
         if use_saved.lower()=='y':
-            index_to_use = eval(input(f"{parameters.System_Name}\nEnter the index which you want to use:"))
+            index_to_use = eval(input(f"{parameters.System_Name}\n\tEnter the index which you want to use:"))
             if index_to_use not in parameters.index:
-                print("Index not found Using Alpha Centauri System")
+                print("\tIndex not found Using Alpha Centauri System")
                 index_to_use = 0
-            print(f"Using {parameters.System_Name[index_to_use]} system")
+            print(f"\tUsing {parameters.System_Name[index_to_use]} system")
             m1 = parameters.m1[index_to_use]
             m2 = parameters.m2[index_to_use]
             r1 = np.array([parameters.r1_x[index_to_use],parameters.r1_y[index_to_use],parameters.r1_z[index_to_use]])
@@ -79,33 +79,33 @@ while choice != 5:
             v2 = np.array([parameters.v2_x[index_to_use],parameters.v2_y[index_to_use],parameters.v2_z[index_to_use]])
             com = com_pos(m1,r1,m2,r2)
             com_v = com_vel(m1, v1, m2, v2)
-            fra = int(input('Enter number of datapoints[recommended 1500-2000]:'))
+            fra = int(input('\tEnter number of datapoints[recommended 1500-2000]:'))
             time_span = np.linspace(0,float(parameters.timespan[index_to_use]),fra)
             body_1,body_2 = parameters.body_1[index_to_use],parameters.body_2[index_to_use]
         elif use_saved.lower()=='n':
-            print("Using Custom Parameters:")
-            body_1 = input('Enter the name of the first body:')
-            body_2 = input('Enter name of the second body:')
-            r1 = input(f"Enter the position of the {body_1}(x,y,z) separtated by commas:")
-            r2 = input(f"Enter the position of the {body_2}(x,y,z) separtated by commas:")
-            v1 = input(f"Enter the velocity of the {body_1}(vx,vy,vz) separtated by commas:")
-            v2 = input(f"Enter the velocity of the {body_2}(vx,vy,vz) separtated by commas:")
+            print("\tUsing Custom Parameters:")
+            body_1 = input('\tEnter the name of the first body:')
+            body_2 = input('\tEnter name of the second body:')
+            r1 = input(f"\tEnter the position of the {body_1}(x,y,z) separtated by commas:")
+            r2 = input(f"\tEnter the position of the {body_2}(x,y,z) separtated by commas:")
+            v1 = input(f"\tEnter the velocity of the {body_1}(vx,vy,vz) separtated by commas:")
+            v2 = input(f"\tEnter the velocity of the {body_2}(vx,vy,vz) separtated by commas:")
             r1,r2 = '['+r1+']','['+r2+']'
             r1,r2 = eval(r1),eval(r2)
             v1,v2 = '['+v1+']','['+v2+']'
             v1,v2 = eval(v1),eval(v2)
-            m1=float(input(f'Enter Mass of {body_1}:'))
-            m2=float(input(f'Enter Mass {body_2}:'))
-            timespan = int(input('Enter timespan:'))
-            fra = int(input('Enter number of datapoints[recommended 1500-2000]:'))
+            m1=float(input(f'\tEnter Mass of {body_1}:'))
+            m2=float(input(f'\tEnter Mass {body_2}:'))
+            timespan = int(input('\tEnter timespan:'))
+            fra = int(input('\tEnter number of datapoints[recommended 1500-2000]:'))
             time_span = np.linspace(0,timespan,fra)
-            save_to_csv = input('Would you like to csv (y/n):')
+            save_to_csv = input('\tWould you like to csv (y/n):')
             if save_to_csv.lower() =='y':
                 print(f'Saving to CSV')
-                sys_name = input('Enter the name of your system:')
+                sys_name = input('\t\tEnter the name of your system:')
                 parameters.loc[len(parameters)]=[sys_name,body_1,body_2,m1,m2,r1[0],r1[1],r1[2],r2[0],r2[1],r2[2],v1[0],v1[1],v1[2],v2[0],v2[1],v2[2],timespan]
-                print(f"This data will be saved for future use {parameters.tail(1)}")
-                parameters.to_csv('Saved_Parameters.csv')
+                print(f"\t\tThis data will be saved for future use {parameters.tail(1)}")
+                parameters.to_csv('Saved_Parameters.csv',index=False)
         init_para=np.array([r1,r2,v1,v2]).flatten()
         two_b_sol=s_i.odeint(two_b_eqn,init_para,time_span,args=(G,m1,m2))
         r1_sol,r2_sol=two_b_sol[:,:3],two_b_sol[:,3:6]
@@ -126,23 +126,23 @@ while choice != 5:
             h1[0]=ax.scatter(r1_sol[i,0],r1_sol[i,1],r1_sol[i,2],color="b",marker="o",s=80)
             h2[0]=ax.scatter(r2_sol[i,0],r2_sol[i,1],r2_sol[i,2],color="r",marker="o",s=80)
         ani = animation.FuncAnimation(fig,anim,frames=fra,interval=1)
-        save=input("Do you want to  save the animation created(y/n)?:")
+        save=input("\tDo you want to  save the animation created(y/n)?:")
         if save.lower()=='y':
-            name=input('Enter File name without extension:')
+            name=input('\t\tEnter File name without extension:')
             name=name+'.mp4'
-            print(f"Animation will be saved in the current directory as {name}")
+            print(f"\t\tAnimation will be saved in the current directory as {name}")
             ani.save(name,writer='ffmpeg',dpi=300,fps=30)
-            print("Animation saved successfully! :D")
+            print("\t\tAnimation saved successfully! :D")
         plt.show()
     elif choice==2:
-        use_saved = input("Do you want to use saved parameters from the CSV? (y/n): ")
+        use_saved = input("\tDo you want to use saved parameters from the CSV? (y/n): ")
         if use_saved.lower() == 'y':
-            index_to_use = eval(input(f"{parameters.System_Name}\nEnter the index which you want to use:"))
+            index_to_use = eval(input(f"{parameters.System_Name}\n\tEnter the index which you want to use:"))
             if index_to_use not in parameters.index:
-                print("Index not found Using Alpha Centauri System")
+                print("\tIndex not found Using Alpha Centauri System")
                 index_to_use = 0
             else:
-                print(f"Using {parameters.System_Name[index_to_use]} system")
+                print(f"\tUsing {parameters.System_Name[index_to_use]} system")
                 m1 = parameters.m1[index_to_use]
                 m2 = parameters.m2[index_to_use]
                 r1 = np.array([parameters.r1_x[index_to_use],parameters.r1_y[index_to_use],parameters.r1_z[index_to_use]])
@@ -151,60 +151,64 @@ while choice != 5:
                 v2 = np.array([parameters.v2_x[index_to_use],parameters.v2_y[index_to_use],parameters.v2_z[index_to_use]])
                 com = com_pos(m1,r1,m2,r2)
                 com_v = com_vel(m1, v1, m2, v2)
-                fra = int(input('Enter number of datapoints[recommended 1500-2000]:'))
-                time_span = np.linspace(0,parameters.timespan,fra)
+                fra = int(input('\tEnter number of datapoints[recommended 1500-2000]:'))
+                time_span = np.linspace(0,parameters.timespan[index_to_use],fra)
         elif use_saved.lower()=='n':
-            print("Using Custom Parameters:")
-            body_1 = input('Enter the name of the first body:')
-            body_2 = input('Enter name of the second body:')
-            r1 = input(f"Enter the position of the {body_1}(x,y,z) separtated by commas:")
-            r2 = input(f"Enter the position of the {body_2}(x,y,z) separtated by commas:")
-            v1 = input(f"Enter the velocity of the {body_1}(vx,vy,vz) separtated by commas:")
-            v2 = input(f"Enter the velocity of the {body_2}(vx,vy,vz) separtated by commas:")
+            print("\tUsing Custom Parameters:")
+            body_1 = input('\tEnter the name of the first body:')
+            body_2 = input('\tEnter name of the second body:')
+            r1 = input(f"\tEnter the position of the {body_1}(x,y,z) separtated by commas:")
+            r2 = input(f"\tEnter the position of the {body_2}(x,y,z) separtated by commas:")
+            v1 = input(f"\tEnter the velocity of the {body_1}(vx,vy,vz) separtated by commas:")
+            v2 = input(f"\tEnter the velocity of the {body_2}(vx,vy,vz) separtated by commas:")
             r1,r2 = '['+r1+']','['+r2+']'
             r1,r2 = eval(r1),eval(r2)
             v1,v2 = '['+v1+']','['+v2+']'
             v1,v2 = eval(v1),eval(v2)
-            m1=float(input(f'Enter Mass of {body_1}:'))
-            m2=float(input(f'Enter Mass {body_2}:'))
-            timespan = int(input('Enter timespan:'))
-            fra = int(input('Enter number of datapoints[recommended 1500-2000]:'))
+            m1=float(input(f'\tEnter Mass of {body_1}:'))
+            m2=float(input(f'\tEnter Mass {body_2}:'))
+            timespan = int(input('\tEnter timespan:'))
+            fra = int(input('\tEnter number of datapoints[recommended 1500-2000]:'))
             time_span = np.linspace(0,timespan,fra)
-            init_para = np.array([r1,r2,v1,v2]).flatten()
-            two_b_sol = s_i.odeint(two_b_eqn,init_para,time_span,args=(G,m1,m2))
-            r1_sol = two_b_sol[:,:3]
-            r2_sol = two_b_sol[:,3:6]
-            v1_sol = two_b_sol[:,6:9]
-            v2_sol = two_b_sol[:,9:12]
-            df = pd.DataFrame({
-            'Time':time_span,
-            'r1_x': r1_sol[:, 0],
-            'r1_y': r1_sol[:, 1],
-            'r1_z': r1_sol[:, 2],
-            'r2_x': r2_sol[:, 0],
-            'r2_y': r2_sol[:, 1],
-            'r2_z': r2_sol[:, 2],
-            'v1_x': v1_sol[:, 0],
-            'v1_y': v1_sol[:, 1],
-            'v1_z': v1_sol[:, 2],
-            'v2_x': v2_sol[:, 0],
-            'v2_y': v2_sol[:, 1],
-            'v2_z': v2_sol[:, 2]
-            })
-            path_and_name = input('Enter the file path of and name without extension:')
-            path_and_name = path_and_name+'.csv'
-            df.to_csv(path_and_name)
-            print(f'File saved as {path_and_name}')
+        init_para = np.array([r1,r2,v1,v2]).flatten()
+        two_b_sol = s_i.odeint(two_b_eqn,init_para,time_span,args=(G,m1,m2))
+        r1_sol = two_b_sol[:,:3]
+        r2_sol = two_b_sol[:,3:6]
+        v1_sol = two_b_sol[:,6:9]
+        v2_sol = two_b_sol[:,9:12]
+        df = pd.DataFrame({
+        'Time':time_span,
+        'r1_x': r1_sol[:, 0],
+        'r1_y': r1_sol[:, 1],
+        'r1_z': r1_sol[:, 2],
+        'r2_x': r2_sol[:, 0],
+        'r2_y': r2_sol[:, 1],
+        'r2_z': r2_sol[:, 2],
+        'v1_x': v1_sol[:, 0],
+        'v1_y': v1_sol[:, 1],
+        'v1_z': v1_sol[:, 2],
+        'v2_x': v2_sol[:, 0],
+        'v2_y': v2_sol[:, 1],
+        'v2_z': v2_sol[:, 2]
+        })
+        path_and_name = input('\tEnter the file path of and name without extension:')
+        path_and_name = path_and_name+'.csv'
+        df.to_csv(path_and_name,index=False)
+        print(f'\tFile saved as {path_and_name}')
     elif choice==3:
-        path_to_csv = input('Enter the Address of the csv:\n')
-        dtf = pd.read_csv(path_to_csv)
+        path_to_csv = input('\tEnter the Address of the csv:')
+        try:
+            dtf = pd.read_csv(path_to_csv)
+        except FileNotFoundError:
+            print(f"The file path/file {path_to_csv} does not exist, Please recheck the path. Quiting the program")
+            quit()
         #Taking Magnitudes of vector
         dtf['r1_mag'] = (dtf.r1_x**2+dtf.r1_y**2+dtf.r1_y**2)**(1/2)
         dtf['r2_mag'] = (dtf.r2_x**2+dtf.r2_y**2+dtf.r2_y**2)**(1/2)
         dtf['v1_mag'] = (dtf.v1_x**2+dtf.v1_y**2+dtf.v1_y**2)**(1/2)
         dtf['v2_mag'] = (dtf.v2_x**2+dtf.v2_y**2+dtf.v2_y**2)**(1/2)
-        plot_choice = int(input('Do you want to\n1.Plot all the data\n2.Plot the distance from COM\n3.Plot the Velocity\n'))
-        plt.xlabel('Time')
+        plot_choice = int(input('\tDo you want to\n\t1.Plot all the data\n\t2.Plot the distance from COM\n\t3.Plot the Velocity:\n\t'))
+        plt.ylabel('Time')
         r1_mag,r2_mag,v1_mag,v2_mag,t = dtf.r1_mag,dtf.r2_mag,dtf.v1_mag,dtf.v2_mag,dtf.Time
         if plot_choice == 1:
             plt.plot(r1_mag,t,label = 'r1')
@@ -221,34 +225,34 @@ while choice != 5:
         plt.legend()
         plt.show()
     elif choice==4:
-        print(f"Would you like to\n1.Edit a column\n2.Delete a data?:")
-        edit_choice = eval(input(''))
+        print(f"\tWould you like to\n\t1.edit a column\n\t2.Delete a saved parameter?:")
+        edit_choice = eval(input('\t'))
         while edit_choice not in (1,2):
-            edit_choice = input('Pls enter 1 or 2 only')    
+            edit_choice = input('\tPls enter 1 or 2 only')    
         if edit_choice == 1:
-            print(f"Which row would you like to change:\n{parameters.System_Name}")
-            row_to_edit = eval(input("Enter row index:"))
+            print(f"\t\tWhich row would you like to change:\n{parameters.System_Name}")
+            row_to_edit = eval(input("\t\tEnter row index:"))
             while row_to_edit not in parameters.index:
-                print("Invalid index")
-                row_to_edit = eval(input("Please enter a valid row index:"))
-            print(f"Which column do you want to change:\n{parameters.columns}")
-            column_to_edit = input("Enter column index:")
+                print("\t\tInvalid index")
+                row_to_edit = eval(input("\t\tPlease enter a valid row index:"))
+            print(f"\t\tWhich column do you want to change:\n{parameters.columns}")
+            column_to_edit = input("\t\tEnter column index:")
             while column_to_edit not in parameters.columns:
-                print("Invalid Index")
-                column_to_edit = eval(input("Please enter a valid column:"))
+                print("\t\tInvalid Index")
+                column_to_edit = eval(input("\t\tPlease enter a valid column:"))
             if column_to_edit in ['System_Name','body_1','body_2']:
-                new_value = input(f"The old value if {parameters.at[row_to_edit,column_to_edit]}, the new value should be:")
+                new_value = input(f"\t\tThe old value is {parameters.at[row_to_edit,column_to_edit]}, the new value should be:")
             else:
-                new_value = float(input(f"The old value if {parameters.at[row_to_edit,column_to_edit]}, the new value should be:"))
-                parameters.at[row_to_edit,column_to_edit]=new_value
+                new_value = float(input(f"\t\tThe old value is {parameters.at[row_to_edit,column_to_edit]}, the new value should be:"))
+            parameters.at[row_to_edit,column_to_edit]=new_value
         else:
-            print(f'Which row would you like to delete?\n{parameters.System_Name}')
-            row_to_delete = eval(input("Enter the row index:"))
+            print(f'\t\tWhich row would you like to delete?\n{parameters.System_Name}')
+            row_to_delete = eval(input("\t\tEnter the row index:"))
             while row_to_delete not in parameters.index:
-                row_to_delete = eval(input("Please enter a valid row index:"))
+                row_to_delete = eval(input("\t\tPlease enter a valid row index:"))
             parameters=parameters.drop(row_to_delete,axis='rows')
-        print(f'Updated csv is:\n{parameters}')
-        print(f"Should the changes be made to the file?(y/n):")
+        print(f'\tUpdated csv is:\n{parameters}')
+        print(f"\tShould the changes be made to the file?(y/n):")
         update_to_csv=input('')
         if update_to_csv.lower()=='y':
             parameters.to_csv('Saved_Para_Edited.csv',index=False)
